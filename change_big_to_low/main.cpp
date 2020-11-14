@@ -1,3 +1,9 @@
+/*
+    @@ 反转数字
+    @@ auther pengxd
+    @@ date: 2020/11/14
+*/
+
 #include<iostream>
 
 class Solution {
