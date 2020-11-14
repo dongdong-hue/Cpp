@@ -1,0 +1,6 @@
+import path ;
+import os ;
+
+exe mmy
+    : main.cpp
+    ;
