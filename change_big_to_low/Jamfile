@@ -1,0 +1,23 @@
+import path ;
+import os ;
+
+project
+    : requirements
+      <toolset>clang:<cxxflags>"-std=c++11"
+    ;
+
+exe rotate_data
+    :
+        main.cpp
+    :
+        <cxxflags>"-std=c++11"
+    ;
+
+exe vec
+    :
+        vec.cpp
+    :
+        <cxxflags>"-std=c++11"
+    ;
+
+install stage :  rotate_data vec ; 
