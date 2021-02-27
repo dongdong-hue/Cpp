@@ -10,6 +10,9 @@ Widget::Widget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Widget)
 {
+    setMinimumSize(550, 240);
+    setMaximumSize(1000, 550);
+
     ui->setupUi(this);
 }
 

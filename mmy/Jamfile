@@ -1,6 +1,11 @@
 import path ;
 import os ;
 
+path-constant CWD : . ;
+
 exe mmy
     : main.cpp
+
     ;
+
+install bin : mmy : <location>$(CWD)/stage/bin ;

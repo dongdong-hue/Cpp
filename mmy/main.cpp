@@ -1,5 +1,6 @@
 ﻿// boost库中noncopyable使用
 #include <boost/utility.hpp>
+#include <boost/format.hpp>
 #include <iostream>
 using namespace std;
 class myclass : public boost::noncopyable {
@@ -8,12 +9,26 @@ public:
     myclass(int i) {}
 };
 
+class Format
+{
+public:
+    Format(){}
+    ~Format(){}
+    static void Print()
+    {
+        cout << boost::format("%s: %05d + %d = %d\n") % "sum" % 1 % 2 % (1 +2);
+    }
+};
+
+
 int main() {
-    myclass c1();
-    myclass c2(1);
+    // myclass c1();
+    // myclass c2(1);
     // myclass c3(c1);
     // myclass c3 = c1;
-    std::cout << "bianyichenggogn" << std::endl;
+    // std::cout << "bianyichenggogn" << std::endl;
+    Format myformat;
+    Format::Print();
     return 0;
 }
 
