@@ -1,5 +1,7 @@
 #include "widget.h"
 #include "ui_widget.h"
+#include <qstring>
+#include <qdir>
 
 Widget::Widget(QWidget *parent) :
     QWidget(parent),
@@ -7,7 +9,8 @@ Widget::Widget(QWidget *parent) :
 {
     ui->setupUi(this);
     QFile file();
-    Qstring str(QDir::currentPath());
+    QString str(QDir::currentPath());
+
 }
 
 Widget::~Widget()

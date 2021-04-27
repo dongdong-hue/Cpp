@@ -29,7 +29,9 @@ public:
             return;
         }
         std::cout << "client: " << sock->remote_endpoint().address() << std::endl;
-        sock->async_write_some(buffer("hello asio"),
+        std::string str;
+        std::cin >> str;
+        sock->async_write_some(buffer(str),
                 bind(&Server::write_handler, this, placeholders::error));
         
         start();

@@ -10,6 +10,7 @@ exe client
       $(BOOST_PARH)/libboost_thread.so
     :
       <cxxflags>"-std=c++11"
+      <toolset>"gcc"
     ;
 
 exe server

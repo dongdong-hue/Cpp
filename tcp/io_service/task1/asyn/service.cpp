@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace boost::asio;
 using namespace boost::posix_time;
-io_service service;
+boost::asio::io_service service;
  
 #define MEM_FN(x)       boost::bind(&self_type::x, shared_from_this())
 #define MEM_FN1(x,y)    boost::bind(&self_type::x, shared_from_this(),y)
@@ -75,7 +75,7 @@ class Acceptor
 {
 public:
 	Acceptor(){}
-	Acceptor::~Acceptor(){}
+	~Acceptor(){}
 	ip::tcp::acceptor acceptor(service, ip::tcp::endpoint(ip::tcp::v4(), 8001));
 	
 	void handle_accept(talk_to_client::ptr client, const boost::system::error_code & err) {
@@ -98,7 +98,7 @@ public:
 			handle_accept(client, ec);
 		});
 	}
-}
+};
  
 int main(int argc, char* argv[]) {
 	Acceptor accept;

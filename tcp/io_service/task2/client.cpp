@@ -3,7 +3,8 @@
 #include <boost/asio.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
-
+#include <atomic>
+#include <iostream>
 using namespace boost::asio;    
 
 class Client{
@@ -12,14 +13,40 @@ public:
     Client(boost::asio::io_service& io) : sio_(io),
         ep(ip::address::from_string("127.0.0.1"), 6688)
     {
-        start();
+        Init();
     }
+    void Init()
+    {
+        running_ = true;
+        boost::thread thrd(boost::bind(&Client::DoJob, this));
+    }
+
+    void DoJob()
+    {
+        std::cout << "DoJob" << std::endl;
+        int i = 0;
+        while(running_)
+        {
+            std::cout << "DoJob i: " << ++i << std::endl;
+            sleep(1);
+        }
+    }
+
     void start()
     {
         sock_pt_ sock(new ip::tcp::socket(sio_));
-        sock->async_connect(ep,
-            bind(&Client::conn_handler, this, placeholders::error, sock)); 
+            sock->async_connect(ep,
+                bind(&Client::conn_handler, this, placeholders::error, sock)); 
     }
+    void stop()
+    {
+        running_ = false;
+        // if (thread_.joinable())
+        // {
+        //     thread_.join();
+        // }
+    }
+
     void conn_handler(const boost::system::error_code& ec, sock_pt_ sock)
     {
         if (ec)
@@ -44,6 +71,8 @@ public:
 private:
     boost::asio::io_service &sio_;
     ip::tcp::endpoint ep;
+    boost::thread thrd_;
+    std::atomic<bool> running_;
 };
 
 int main()
