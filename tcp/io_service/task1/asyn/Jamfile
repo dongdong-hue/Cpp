@@ -15,6 +15,7 @@ exe client
 exe service
     : 
       service.cpp
+      servicetest.cpp
       $(BOOST_PARH)/libboost_system.so
       $(BOOST_PARH)/libboost_thread.so
     :
