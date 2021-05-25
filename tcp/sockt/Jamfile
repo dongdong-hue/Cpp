@@ -1,0 +1,47 @@
+import path ;
+import os ;
+
+path-constant CWD : . ;
+
+project
+    : requirements
+      <toolset>clang:<cxxflags>"-std=c++11"
+    ;
+
+exe tcpserver
+    :
+        $(CWD)/src/tcpserver.cpp
+        #[ path.glob-tree $(CWD)/src/ : *.cpp]
+    :
+        <cxxflags>"-std=c++11"
+    :
+        <variant>debug
+    ;
+
+exe tcpclient
+    :
+        $(CWD)/src/tcpclient.cpp
+        #[ path.glob-tree $(CWD)/src/ : *.cpp]
+    :
+        <cxxflags>"-std=c++11"
+    :
+        <variant>debug
+    ;
+
+exe io_service
+    : 
+      $(CWD)/task1/io_service.cpp
+      $(BOOST_PARH)/libboost_system.so
+      #/boost_1_62_0/libs/system//libboost_system.so
+    :
+      <cxxflags>"-std=c++11"
+    ;
+
+# exe vec
+#     :
+#         vec.cpp
+#     :
+#         <cxxflags>"-std=c++11"
+#     ;
+
+install stage : tcpserver tcpclient io_service ; 

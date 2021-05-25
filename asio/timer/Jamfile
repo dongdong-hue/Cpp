@@ -1,0 +1,18 @@
+import path ;
+import os ;
+
+path-constant CWD : . ;
+
+exe m_time
+    : 
+      m_timer.cpp
+      #/usr/lib/libboost_system.so
+      $(BOOST_PARH)/libboost_system.so
+      #/boost_1_62_0/libs/system//libboost_system.so
+    :
+      <cxxflags>"-std=c++11"
+    ;
+
+install stage : m_time : <install-dependencies>on <install-type>EXE <install-type>LIB <location>$(CWD)/stage ;
+
+explicit stage ;

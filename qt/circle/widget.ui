@@ -19,8 +19,8 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>330</x>
-     <y>90</y>
+     <x>390</x>
+     <y>100</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -32,10 +32,10 @@
   <widget class="QWidget" name="">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>30</y>
+     <x>30</x>
+     <y>50</y>
      <width>431</width>
-     <height>31</height>
+     <height>42</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -60,7 +60,7 @@
       </property>
       <property name="sizeHint" stdset="0">
        <size>
-        <width>70</width>
+        <width>50</width>
         <height>13</height>
        </size>
       </property>
@@ -75,11 +75,23 @@
     </item>
     <item>
      <widget class="QLabel" name="areaLabel_2">
+      <property name="minimumSize">
+       <size>
+        <width>65</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="maximumSize">
        <size>
         <width>54</width>
-        <height>16777215</height>
+        <height>20</height>
        </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Panel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Sunken</enum>
       </property>
       <property name="text">
        <string>                  </string>

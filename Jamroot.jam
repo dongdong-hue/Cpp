@@ -1,2 +1,5 @@
 import path ;
 import os ;
+
+path-constant BOOST_PARH : /usr/lib/ ;
+

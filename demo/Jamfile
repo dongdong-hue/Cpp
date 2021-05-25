@@ -1,0 +1,24 @@
+import path ;
+import os ;
+
+path-constant BOOST_PARH : /usr/lib/ ;
+path-constant CWD : . ;
+
+exe test1
+    : 
+      $(CWD)/test_base_child/test1.cpp
+    :
+      <cxxflags>"-std=c++11"
+    ;
+
+install stage 
+    : 
+        test1 
+    : 
+        <install-dependencies>on 
+        <install-type>EXE 
+        <install-type>LIB 
+        <location>$(CWD)/stage 
+    ;
+
+explicit stage ;

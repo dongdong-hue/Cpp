@@ -1,0 +1,27 @@
+import path ;
+import os ;
+
+path-constant CWD : . ;
+
+exe client
+    : 
+      client.cpp
+      $(BOOST_PARH)/libboost_system.so
+      $(BOOST_PARH)/libboost_thread.so
+    :
+      <cxxflags>"-std=c++11"
+      <toolset>"gcc"
+    ;
+
+exe server
+    : 
+      server.cpp
+      $(BOOST_PARH)/libboost_system.so
+      $(BOOST_PARH)/libboost_thread.so
+    :
+      <cxxflags>"-std=c++11"
+    ;
+
+install stage : server client : <install-dependencies>on <install-type>EXE <install-type>LIB <location>$(CWD)/stage ;
+
+explicit stage ;
