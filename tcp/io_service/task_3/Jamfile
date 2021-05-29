@@ -1,7 +1,18 @@
 import path ;
 import os ;
+import toolset ;
 
 path-constant CWD : . ;
+
+project service
+  : 
+    #<toolset>gcc:<cxxflags>"-std=c++11"
+  :
+    default-build
+    <debug-symbols>on
+    release
+    <threading>multi
+  ;
 
 exe service
     : 
@@ -10,6 +21,10 @@ exe service
       $(BOOST_PARH)/libboost_thread.so
     :
       <cxxflags>"-std=c++11"
+      <linkflags>-Wl,--no-as-needed
+      <linkflags>-lrt
+      <linkflags>-ldl
+      #<linkflags>-lcrypto
     ;
 
 install stage : 
