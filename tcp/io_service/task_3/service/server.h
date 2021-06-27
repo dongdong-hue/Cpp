@@ -11,9 +11,20 @@
 #include <boost/function.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <iostream>
+#include <vector>
 #include<chrono>
 
 #define HEARTEMSG std::string("123456789")
+
+#pragma pack (push, 1)
+struct TcpMsg
+{
+	uint32_t fixed; // 固定 8888
+	uint32_t msg_len;
+	uint16_t msg_type;
+	char msg_data[];
+};
+#pragma pack (pop)
 
 using namespace boost::asio;
 typedef boost::shared_ptr<ip::tcp::socket> socket_ptr;
@@ -34,10 +45,11 @@ public:
     void StartTime();
     void TimerFun(const boost::system::error_code& error);
     void start_accept(); 
-    void handle_msg(const boost::system::error_code &err, char* msg, socket_ptr sock_ptr);
+    void handle_msg(const boost::system::error_code &err, std::size_t rcv_len, char* msg, socket_ptr sock_ptr);
     void io_work();
+    void SpliteMsg(char* msg, bool& is_erase, uint32_t& msg_len);
 private:
-    char read_buffer_[20];
+    std::vector<char> read_buffer_;
     char write_buffer_[512];
     boost::asio::io_service service_;
     boost::shared_ptr<boost::asio::ip::tcp::endpoint> ep_ = {nullptr};

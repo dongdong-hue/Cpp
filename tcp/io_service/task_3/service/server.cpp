@@ -2,8 +2,9 @@
 
 Session::Session()
 {
-    ep_ = boost::make_shared<boost::asio::ip::tcp::endpoint>(ip::address::from_string("127.0.0.1"), 8001); // 监听端口8001
+    ep_ = boost::make_shared<boost::asio::ip::tcp::endpoint>(ip::address::from_string("192.168.198.142"), 8001); // 监听端口8001
     acc_ = boost::make_shared<boost::asio::ip::tcp::acceptor>(service_, *ep_);
+    read_buffer_.clear();
 }
 
 Session::~Session()
@@ -11,8 +12,12 @@ Session::~Session()
 
 void Session::HadleRead(const boost::system::error_code &err, socket_ptr sock_ptr) 
 {
-    sock_ptr->async_read_some(buffer(read_buffer_, 20), 
-        boost::bind(&Session::handle_msg, shared_from_this(), _1, read_buffer_, sock_ptr));
+    char msg[20] = {0};
+    memset(msg, 0, 20);
+    // std::cout << "msg: " << msg << "=======\n\n";
+    // std::cout << "HadleRead---\n\n";
+    sock_ptr->async_read_some(buffer(msg, 1), 
+        boost::bind(&Session::handle_msg, shared_from_this(), _1, _2, msg, sock_ptr));
 }
 
 void Session::handle_accept(const boost::system::error_code &err, socket_ptr sock_ptr) 
@@ -51,7 +56,9 @@ void Session::SendCallFunc(std::size_t msg_len, const boost::system::error_code&
     if (msg_len != len)
     {
         std::cout << "send msg is not finish\n";
+        return;
     }
+    // std::cout << "SendCallFunc | send a msg\n";
 }
 
 void Session::Async_write(const boost::system::error_code &err, socket_ptr sock_ptr)
@@ -84,7 +91,7 @@ void Session::TimerFun(const boost::system::error_code& error)
     else
     {
         auto now = GetNowTimepoint();
-        if (now - last_timepoint_ >= 3 * heart_interval_)
+        if (now - last_timepoint_ >= 3 * heart_interval_ && last_timepoint_ != 0)
         {
             std::cout << "heart beat timeout--------\n";
             return;
@@ -92,7 +99,7 @@ void Session::TimerFun(const boost::system::error_code& error)
         else if (now - last_timepoint_ >= heart_interval_)
         {
             SendMsg("1234456");
-            std::cout << "send a heartbeat------------------------\n\n";
+            // std::cout << "send a heartbeat------------------------\n\n";
             last_timepoint_ = now;
         }
         StartTime();
@@ -113,21 +120,70 @@ void Session::start_accept()
     IOwork_ = boost::thread(boost::bind(&Session::io_work, shared_from_this()));
 }
 
-void Session::handle_msg(const boost::system::error_code &err, char* msg, socket_ptr sock_ptr)
+void Session::handle_msg(const boost::system::error_code &err, std::size_t rcv_len, char* msg, socket_ptr sock_ptr)
 {
+    boost::system::error_code ec;
     if (err)
     {
-        std::cout << msg << " -----\n\n";
+        std::cout << msg << " -----\n";
         std::cout << err.message() << "未接收到有效\n";
         return;
     }
     else
     {
-        std::cout << msg << "\n";
-        memset(read_buffer_, 0, 20);
-        boost::system::error_code ec;
+        read_buffer_.push_back(msg[0]);
+        // std::cout << "handle_msg, recv a msg---\n\n";
+        while (read_buffer_.size() > 0)
+        {
+            if (read_buffer_.size() < sizeof(TcpMsg))
+            {
+                // std::cout << "rcv length < sizeof(TcpMsg)---\n";
+                // HadleRead(ec, sock_ptr);
+                break ;
+            } 
+            TcpMsg* tcp_msg = (TcpMsg*)(read_buffer_.data());
+            // std::cout << "tcp_msg->fixed" << tcp_msg->fixed << std::endl;
+
+            if (read_buffer_.size() < tcp_msg->msg_len + sizeof(TcpMsg))
+            {
+                // HadleRead(ec, sock_ptr);
+                break;
+            }
+            std::string msg_data1(tcp_msg->msg_data, tcp_msg->msg_len);
+            // std::cout << msg_data1 << std::endl;
+            // std::cout << "msg_len: " << tcp_msg->msg_len << " ,msg type: " << tcp_msg->msg_type 
+            //           << std::endl;
+            switch (tcp_msg->msg_type)
+            {
+                case 1:
+                {
+                    //心跳
+                    // std::cout << "rcv a hb msg, rcv msg: " << tcp_msg->msg_data;                   
+                    break;
+                }
+                case 2:
+                {
+                    //正常消息
+                    std::cout << "rcv msg is: " << msg_data1 << std::endl;
+                    //memset(read_buffer_, 0, 20);    
+                    break;                
+                }
+                default:
+                {
+                    std::cout << "un support msg type: " << tcp_msg->msg_type 
+                              <<  "rcv msg: " << msg_data1 << std::endl;
+                    break;
+                }
+            }
+            read_buffer_.erase(read_buffer_.begin(), read_buffer_.begin() + tcp_msg->msg_len + sizeof(TcpMsg));
+        }
         HadleRead(ec, sock_ptr);
     }
+}
+
+void Session::SpliteMsg(char* msg, bool& is_erase, uint32_t& msg_len)
+{
+
 }
 
 void Session::io_work()

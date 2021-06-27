@@ -12,16 +12,16 @@ exe client
       <cxxflags>"-std=c++11"
     ;
 
-exe service
-    : 
-      service.cpp
-      servicetest.cpp
-      $(BOOST_PARH)/libboost_system.so
-      $(BOOST_PARH)/libboost_thread.so
-    :
-      <cxxflags>"-std=c++11"
-    ;
+# exe service
+#     : 
+#       service.cpp
+#       servicetest.cpp
+#       $(BOOST_PARH)/libboost_system.so
+#       $(BOOST_PARH)/libboost_thread.so
+#     :
+#       <cxxflags>"-std=c++11"
+#     ;
 
-install stage : client service : <install-dependencies>on <install-type>EXE <install-type>LIB <location>$(CWD)/stage ;
+install stage : client : <install-dependencies>on <install-type>EXE <install-type>LIB <location>$(CWD)/stage ;
 
 explicit stage ;

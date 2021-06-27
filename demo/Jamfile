@@ -11,9 +11,17 @@ exe test1
       <cxxflags>"-std=c++11"
     ;
 
+exe struct_test
+    : 
+      $(CWD)/struct_demo/struct_test.cpp
+    :
+      <cxxflags>"-std=c++11"
+    ;
+
 install stage 
     : 
         test1 
+        struct_test
     : 
         <install-dependencies>on 
         <install-type>EXE 
