@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2021-03-19T23:28:55
+# Project created by QtCreator 2021-06-29T20:59:02
 #
 #-------------------------------------------------
 
@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = openfile
+TARGET = boost_test2
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
@@ -25,16 +25,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        openfilewindow.cpp \
-    closewindow.cpp
+        widget.cpp
 
 HEADERS += \
-        openfilewindow.h \
-    closewindow.h
-
-FORMS += \
-        openfilewindow.ui \
-    closewindow.ui
+        widget.h
 
 INCLUDEPATH += G:\c++\boost_1_62_0
 LIBS += -LG:\c++\boost_1_62_0\lib64-msvc-14.0

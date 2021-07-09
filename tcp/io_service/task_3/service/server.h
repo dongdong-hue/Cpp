@@ -10,6 +10,10 @@
 #include <boost/make_shared.hpp>
 #include <boost/function.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/array.hpp>
+//#include <boost/typeof/typeof.hpp>
+#include <boost/scoped_array.hpp>
+#include <boost/shared_array.hpp>
 #include <iostream>
 #include <vector>
 #include<chrono>
@@ -38,7 +42,7 @@ public:
     void HadleRead(const boost::system::error_code &err, socket_ptr sock_ptr);
     void handle_accept(const boost::system::error_code &err, socket_ptr sock_ptr);
     void WriteMsg(/*const boost::system::error_code &err, socket_ptr sock_ptr*/);
-    void SendMsg(const std::string& send_msg);
+    void SendMsg(std::string& send_msg, const std::size_t msg_len , const uint16_t msg_type);
     void SendCallFunc(std::size_t msg_len, const boost::system::error_code& err, std::size_t len);
     void Async_write(const boost::system::error_code &err, socket_ptr sock_ptr);
     int64_t GetNowTimepoint();

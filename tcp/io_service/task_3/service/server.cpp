@@ -1,8 +1,13 @@
 #include "server.h"
 
+/***********
+ * 1. sudo ifconfig eth0 192.168.0.1 netmask 255.255.255.128
+ * 
+ * ***********/
+
 Session::Session()
 {
-    ep_ = boost::make_shared<boost::asio::ip::tcp::endpoint>(ip::address::from_string("192.168.198.142"), 8001); // 监听端口8001
+    ep_ = boost::make_shared<boost::asio::ip::tcp::endpoint>(ip::address::from_string("192.168.184.128"), 8001); // 监听端口8001
     acc_ = boost::make_shared<boost::asio::ip::tcp::acceptor>(service_, *ep_);
     read_buffer_.clear();
 }
@@ -35,16 +40,23 @@ void Session::WriteMsg()
     std::cout << "start write data:\n";
     std::cin >> send_buf;
     std::string send_msg(send_buf);
-    SendMsg(send_msg);
+    SendMsg(send_msg, send_msg.length(), 1);
     boost::system::error_code ec;
     WriteMsg();
 }
 
-void Session::SendMsg(const std::string& send_msg)
+void Session::SendMsg(std::string& send_msg, const std::size_t msg_len , const uint16_t msg_type)
 {
     // memcpy(msg, send_buf, 512);
-    async_write(*sock_ptr_, boost::asio::buffer(send_msg, send_msg.length()),
-            boost::bind(&Session::SendCallFunc, shared_from_this(), send_msg.length(), _1, _2));
+    boost::shared_array<char> msg_ptr(new char[sizeof(TcpMsg) + msg_len]);
+    TcpMsg* tcp_ptr = (TcpMsg*)(msg_ptr.get());
+    tcp_ptr->fixed = 8888;
+    tcp_ptr->msg_len = msg_len;
+    tcp_ptr->msg_type = msg_type;
+    memcpy(tcp_ptr->msg_data, send_msg.data(), send_msg.length());
+
+    async_write(*sock_ptr_, boost::asio::buffer(msg_ptr.get(), sizeof(TcpMsg) + msg_len),
+            boost::bind(&Session::SendCallFunc, shared_from_this(), sizeof(TcpMsg) + msg_len, _1, _2));
 }
 
 void Session::SendCallFunc(std::size_t msg_len, const boost::system::error_code& err, std::size_t len)
@@ -98,7 +110,9 @@ void Session::TimerFun(const boost::system::error_code& error)
         }
         else if (now - last_timepoint_ >= heart_interval_)
         {
-            SendMsg("1234456");
+            std::string str;
+			str += "123456";
+            SendMsg(str, str.length(), 2);
             // std::cout << "send a heartbeat------------------------\n\n";
             last_timepoint_ = now;
         }
@@ -155,13 +169,13 @@ void Session::handle_msg(const boost::system::error_code &err, std::size_t rcv_l
             //           << std::endl;
             switch (tcp_msg->msg_type)
             {
-                case 1:
+                case 2:
                 {
                     //心跳
                     // std::cout << "rcv a hb msg, rcv msg: " << tcp_msg->msg_data;                   
                     break;
                 }
-                case 2:
+                case 1:
                 {
                     //正常消息
                     std::cout << "rcv msg is: " << msg_data1 << std::endl;
