@@ -9,11 +9,6 @@
 #include<iostream>
 using namespace boost::asio;
 
-class base 
-{
-    virtual void 
-}
-
 
 int main()
 {

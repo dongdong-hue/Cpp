@@ -1,18 +1,32 @@
 import path ;
 import os ;
+import toolset ;
 
 path-constant CWD : . ;
 
+path-constant /boost : $(BOOST_ROOT) ;
+
+echo boost_path is: $(BOOST_ROOT) ;
 exe m_time
     : 
       m_timer.cpp
-      #/usr/lib/libboost_system.so
-      $(BOOST_PARH)/libboost_system.so
-      #/boost_1_62_0/libs/system//libboost_system.so
+      #$(CPP_PATH)/base
+      $(CPP_PATH)//boost
+      #<link>static
     :
       <cxxflags>"-std=c++11"
+      #<implicit-dependency>/boost//headers
+      #<define>WIN32 <define>_WIN32
+    :
+      <variant>release
     ;
 
-install stage : m_time : <install-dependencies>on <install-type>EXE <install-type>LIB <location>$(CWD)/stage ;
+install stage 
+      : m_time 
+      : <install-dependencies>on 
+        <install-type>EXE 
+        <install-type>LIB 
+        <location>$(CWD)/stage 
+      ;
 
 explicit stage ;
