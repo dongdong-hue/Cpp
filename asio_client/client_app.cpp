@@ -97,7 +97,7 @@ namespace IOSer
 			SendMsg(str, str.length(), IOSer::Protol::MsgType::Writemsg);
 			PushMsg();
 		}
-		void AsioClient::SendMsg(std::string& send_msg, const std::size_t msg_len, const uint16_t msg_type)
+		void AsioClient::SendMsg(const std::string& send_msg, const std::size_t msg_len, const uint16_t msg_type)
 		{
 			boost::shared_array<char> msg_ptr(new char[sizeof(IOSer::Protol::TcpMsg) + msg_len]);
 			IOSer::Protol::TcpMsg* tcp_ptr = (IOSer::Protol::TcpMsg*)(msg_ptr.get());

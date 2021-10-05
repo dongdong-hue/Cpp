@@ -1,0 +1,21 @@
+import path ;
+import os ;
+
+path-constant CWD : . ;
+
+exe mmy
+    : 
+      main.cpp
+      $(CPP_PATH)//boost
+    :
+      
+    ;
+
+install stage : 
+                mmy 
+              : <install-dependencies>on 
+                <install-type>EXE 
+                <install-type>LIB 
+                <location>$(CWD)/stage ;
+
+explicit stage ;

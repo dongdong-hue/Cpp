@@ -1,0 +1,15 @@
+import path ;
+import os ;
+import toolset ;
+
+path-constant CWD : . ;
+
+lib protocol_header
+  :
+    $(CWD)/protol.h
+  :
+  :
+    <include>$(CWD)
+  :
+    <include>$(CWD)
+  ;

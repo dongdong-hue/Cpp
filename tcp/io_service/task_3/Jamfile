@@ -3,35 +3,40 @@ import os ;
 import toolset ;
 
 path-constant CWD : . ;
+path-constant 3RD_PATH : $(CPP_PATH)/3rd ;
 
-project service
-  : 
-    #<toolset>gcc:<cxxflags>"-std=c++11"
-  :
-    default-build
-    <debug-symbols>on
-    release
-    <threading>multi
-  ;
+# project service
+#   : 
+#     #<toolset>gcc:<cxxflags>"-std=c++11"
+#   :
+#     default-build
+#     <debug-symbols>on
+#     release
+#     <threading>multi
+#   ;
 
 exe service
     : 
       $(CWD)/service/server.cpp
-      $(BOOST_PARH)/libboost_system.so
-      $(BOOST_PARH)/libboost_thread.so
+      $(CPP_PATH)//boost
+      $(CPP_PATH)/3rd//3rd_base
+      #$(BOOST_ROOT)/libboost_system.so
+      #$(BOOST_ROOT)/libboost_thread.so
     :
       <cxxflags>"-std=c++11"
-      <linkflags>-Wl,--no-as-needed
-      <linkflags>-lrt
-      <linkflags>-ldl
+      #<linkflags>-Wl,--no-as-needed
+      #<linkflags>-lrt
+      #<linkflags>-ldl
       #<linkflags>-lcrypto
     ;
 
-install stage : 
-                service 
-              : <install-dependencies>on 
-                <install-type>EXE 
-                <install-type>LIB 
-                <location>$(CWD)/stage ;
+install etc : $(CWD)/service/etc/server.json : <location>$(CWD)/stage/etc/ ;
+install bin : 
+              service 
+            : <install-dependencies>on 
+              <install-type>EXE 
+              <install-type>LIB 
+              <location>$(CWD)/stage ;
 
+alias stage : etc bin ;
 explicit stage ;

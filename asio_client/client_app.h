@@ -32,14 +32,14 @@ public:
 	void IORun();
 protected:
 	void OnAsynCon(const boost::system::error_code & err);
-	void OnWrite(const boost::system::error_code err, size_t bytes);      // Ð´ÏûÏ¢»Øµ÷
-	void OnRead();       // ¶ÁÏûÏ¢»Øµ÷
+	void OnWrite(const boost::system::error_code err, size_t bytes);      // Ð´ï¿½ï¿½Ï¢ï¿½Øµï¿½
+	void OnRead();       // ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½Øµï¿½
 	void WriteHeartMsg();
 	void PushMsg();
-	void SendMsg(std::string& send_msg, const std::size_t msg_len, const uint16_t msg_type);
+	void SendMsg(const std::string& send_msg, const std::size_t msg_len, const uint16_t msg_type);
 	void StartTime();
-	bool SpliteMsg(const char* data,const std::size_t len, std::size_t& msg_len);    // ·Ö¸îÏûÏ¢
-	void HandleMsg(boost::shared_array<char> read_buffer, const boost::system::error_code & err, size_t bytes);    // ´¦ÀíÏûÏ¢
+	bool SpliteMsg(const char* data,const std::size_t len, std::size_t& msg_len);    // ï¿½Ö¸ï¿½ï¿½ï¿½Ï¢
+	void HandleMsg(boost::shared_array<char> read_buffer, const boost::system::error_code & err, size_t bytes);    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 	void HandleMsg(const char*  data, const std::size_t msg_len);
 	void HanleHBMsg(IOSer::Protol::TcpMsg* tcp_ptr, const std::size_t msg_len);
 	void HanleReadMsg(IOSer::Protol::TcpMsg* tcp_ptr, const std::size_t msg_len);
@@ -58,8 +58,8 @@ private:
 	uint16_t    service_port_ = {0};
 
 	std::string rcv_msg_;
-	uint16_t heart_interval_ = { 3 };   //ÐÄÌøÊ±¼ä
-	std::atomic<uint16_t> heart_out_ = { 0 };		//ÀÛ¼ÆÐÄÌø´ÎÊý
+	uint16_t heart_interval_ = { 3 };   //ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
+	std::atomic<uint16_t> heart_out_ = { 0 };		//ï¿½Û¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 };
 
 }

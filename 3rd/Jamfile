@@ -1,0 +1,17 @@
+import path ;
+import os ;
+import toolset ;
+
+path-constant Third_path : . ;
+
+lib 3rd_base
+    :
+        $(Third_path)/base/utils.cpp
+        #[ path.glob $(CWD)/base : *.cpp ]
+    :
+        <cxxflags>"-std=c++11"
+        <link>static
+    :
+    :
+        <include>$(Third_path)/base
+    ;

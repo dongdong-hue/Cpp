@@ -10,7 +10,7 @@
 
 int main()
 {
-	IOSer::ClenitApp::AsioClient client("192.168.198.142", 8001);
+	IOSer::ClenitApp::AsioClient client("172.17.0.11", 8765);
 	client.Start();
 	while (1)
 	{

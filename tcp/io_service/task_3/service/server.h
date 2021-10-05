@@ -11,24 +11,16 @@
 #include <boost/function.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/array.hpp>
-//#include <boost/typeof/typeof.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/shared_array.hpp>
 #include <iostream>
 #include <vector>
-#include<chrono>
-
+#include <string>
+#include <chrono>
+#include "protol.h"
+#include "config.h"
+#include <include/utils.h>
 #define HEARTEMSG std::string("123456789")
-
-#pragma pack (push, 1)
-struct TcpMsg
-{
-	uint32_t fixed; // 固定 8888
-	uint32_t msg_len;
-	uint16_t msg_type;
-	char msg_data[];
-};
-#pragma pack (pop)
 
 using namespace boost::asio;
 typedef boost::shared_ptr<ip::tcp::socket> socket_ptr;
@@ -45,15 +37,17 @@ public:
     void SendMsg(std::string& send_msg, const std::size_t msg_len , const uint16_t msg_type);
     void SendCallFunc(std::size_t msg_len, const boost::system::error_code& err, std::size_t len);
     void Async_write(const boost::system::error_code &err, socket_ptr sock_ptr);
+    void AsyncAccept();
     int64_t GetNowTimepoint();
     void StartTime();
     void TimerFun(const boost::system::error_code& error);
-    void start_accept(); 
-    void handle_msg(const boost::system::error_code &err, std::size_t rcv_len, char* msg, socket_ptr sock_ptr);
+    bool Init();
+    void Start(); 
+    void handle_msg(const boost::system::error_code &err, std::size_t rcv_len, const char* msg, socket_ptr sock_ptr);
     void io_work();
     void SpliteMsg(char* msg, bool& is_erase, uint32_t& msg_len);
 private:
-    std::vector<char> read_buffer_;
+    std::string read_buffer_;
     char write_buffer_[512];
     boost::asio::io_service service_;
     boost::shared_ptr<boost::asio::ip::tcp::endpoint> ep_ = {nullptr};
@@ -64,6 +58,7 @@ private:
     int64_t heart_interval_ = {3};
     int64_t last_timepoint_ = {0};
     boost::asio::deadline_timer timer_{service_};
+    Sev::Config::Cfg cfg_;
 };
 
 #endif
