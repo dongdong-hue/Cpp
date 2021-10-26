@@ -26,7 +26,7 @@ using namespace boost::asio;
 typedef boost::shared_ptr<ip::tcp::socket> socket_ptr;
 
 class Session : public boost::enable_shared_from_this<Session>
-	, boost::noncopyable 
+        , boost::noncopyable
 {
 public:
     Session();
@@ -42,7 +42,8 @@ public:
     void StartTime();
     void TimerFun(const boost::system::error_code& error);
     bool Init();
-    void Start(); 
+    void Start();
+    void Stop();
     void handle_msg(const boost::system::error_code &err, std::size_t rcv_len, const char* msg, socket_ptr sock_ptr);
     void io_work();
     void SpliteMsg(char* msg, bool& is_erase, uint32_t& msg_len);

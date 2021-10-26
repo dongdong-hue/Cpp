@@ -16,6 +16,7 @@ exe client
 exe server
     : 
       server.cpp
+      $(CPP_PATH)//boost
       $(BOOST_PARH)/libboost_system.so
       $(BOOST_PARH)/libboost_thread.so
     :

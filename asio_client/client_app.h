@@ -15,7 +15,7 @@
 #include <boost/shared_array.hpp>
 #include <string>
 #include <atomic>
-#include "protol.h"
+#include <protol.h>
 
 namespace IOSer
 {

@@ -10,8 +10,25 @@ lib 3rd_base
         #[ path.glob $(CWD)/base : *.cpp ]
     :
         <cxxflags>"-std=c++11"
-        <link>static
+        #<link>static
     :
     :
         <include>$(Third_path)/base
+        <include>$(Third_path)/myprotocol
+    ;
+
+alias 3rd_my_protocol
+    :
+    :
+    :
+    :
+        <include>$(Third_path)/myprotocol
+    ;
+
+alias 3rd_log_include
+    :
+    :
+    :
+    :
+        <include>$(Third_path)/limlog/include
     ;

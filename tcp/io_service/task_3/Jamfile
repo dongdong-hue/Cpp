@@ -20,14 +20,13 @@ exe service
       $(CWD)/service/server.cpp
       $(CPP_PATH)//boost
       $(CPP_PATH)/3rd//3rd_base
-      #$(BOOST_ROOT)/libboost_system.so
-      #$(BOOST_ROOT)/libboost_thread.so
+      $(CPP_PATH)/3rd//3rd_log_include
     :
       <cxxflags>"-std=c++11"
-      #<linkflags>-Wl,--no-as-needed
-      #<linkflags>-lrt
-      #<linkflags>-ldl
-      #<linkflags>-lcrypto
+      <linkflags>-Wl,--no-as-needed
+      <linkflags>-lrt
+      <linkflags>-ldl
+      # <linkflags>-lcrypto
     ;
 
 install etc : $(CWD)/service/etc/server.json : <location>$(CWD)/stage/etc/ ;

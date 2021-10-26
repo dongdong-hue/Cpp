@@ -1,8 +1,8 @@
 #include "server.h"
-
+#include <limlog/Log.h>
 /***********
  * 1. sudo ifconfig eth0 192.168.0.1 netmask 255.255.255.128
- * 
+ *
  * ***********/
 
 Session::Session()
@@ -15,7 +15,7 @@ Session::Session()
 Session::~Session()
 {}
 
-void Session::HadleRead(const boost::system::error_code &err, socket_ptr sock_ptr) 
+void Session::HadleRead(const boost::system::error_code &err, socket_ptr sock_ptr)
 {
     // char msg[20] = {0};
     // memset(msg, 0, 20);
@@ -23,11 +23,11 @@ void Session::HadleRead(const boost::system::error_code &err, socket_ptr sock_pt
     static boost::shared_array<char> read_buffer(new char[MaxLen]);
     // std::cout << "msg: " << msg << "=======\n\n";
     // std::cout << "HadleRead---\n\n";
-    sock_ptr->async_read_some(buffer(read_buffer.get(), MaxLen), 
+    sock_ptr->async_read_some(buffer(read_buffer.get(), MaxLen),
         boost::bind(&Session::handle_msg, shared_from_this(), _1, _2, read_buffer.get(), sock_ptr));
 }
 
-void Session::handle_accept(const boost::system::error_code &err, socket_ptr sock_ptr) 
+void Session::handle_accept(const boost::system::error_code &err, socket_ptr sock_ptr)
 {
     if (err) return;
     // 从这里开始, 你可以从socket读取或者写入
@@ -111,7 +111,7 @@ void Session::TimerFun(const boost::system::error_code& error)
         else if (now - last_timepoint_ >= heart_interval_)
         {
             std::string str;
-			str += "123456";
+                        str += "123456";
             SendMsg(str, str.length(), IOSer::Protol::MsgType::HBmsg);
             // std::cout << "send a heartbeat------------------------\n\n";
             last_timepoint_ = now;
@@ -132,7 +132,7 @@ bool Session::Init()
     return true;
 }
 
-void Session::Start() 
+void Session::Start()
 {
     if (!Init())
         return ;
@@ -146,6 +146,11 @@ void Session::Start()
     IOwork_ = boost::thread(boost::bind(&Session::io_work, shared_from_this()));
 }
 
+void Session::Stop()
+{
+
+}
+
 void Session::AsyncAccept()
 {
     std::cout << "AsyncAccept start !!!!\n";
@@ -153,7 +158,7 @@ void Session::AsyncAccept()
     acc_->async_accept(*sock_ptr_, boost::bind(&Session::handle_accept, shared_from_this(),  _1, sock_ptr_));
 }
 
-void Session::handle_msg(const boost::system::error_code &err, std::size_t rcv_len, 
+void Session::handle_msg(const boost::system::error_code &err, std::size_t rcv_len,
                          const char* msg, socket_ptr sock_ptr)
 {
     boost::system::error_code ec;
@@ -166,7 +171,7 @@ void Session::handle_msg(const boost::system::error_code &err, std::size_t rcv_l
     else
     {
         read_buffer_.append(msg, rcv_len);
-        std::cout << "rcv_len: " << rcv_len << " ---\n\n"; 
+        std::cout << "rcv_len: " << rcv_len << " ---\n\n";
         std::cout << "read_buffer_: " << trd::utils::Hxdstr(msg, 1) << std::endl;
         // std::cout << "handle_msg, recv a msg---\n\n";
         while (read_buffer_.size() > 0)
@@ -176,7 +181,7 @@ void Session::handle_msg(const boost::system::error_code &err, std::size_t rcv_l
                 // std::cout << "rcv length < sizeof(TcpMsg)---\n";
                 // HadleRead(ec, sock_ptr);
                 break ;
-            } 
+            }
             IOSer::Protol::TcpMsg* tcp_msg = (IOSer::Protol::TcpMsg*)(read_buffer_.data());
             // std::cout << "read_buffer_: " << trd::utils::Hxdstr(read_buffer_.data(), read_buffer_.size()) << " ---\n";
             // std::cout << "tcp_msg->fixed" << tcp_msg->fixed << std::endl;
@@ -188,26 +193,26 @@ void Session::handle_msg(const boost::system::error_code &err, std::size_t rcv_l
             }
             std::string msg_data1(tcp_msg->msg_data, tcp_msg->msg_len);
             // std::cout << msg_data1 << std::endl;
-            // std::cout << "msg_len: " << tcp_msg->msg_len << " ,msg type: " << tcp_msg->msg_type 
+            // std::cout << "msg_len: " << tcp_msg->msg_len << " ,msg type: " << tcp_msg->msg_type
             //           << std::endl;
             switch (tcp_msg->msg_type)
             {
                 case 2:
                 {
                     //心跳
-                    // std::cout << "rcv a hb msg, rcv msg: " << tcp_msg->msg_data;                   
+                    // std::cout << "rcv a hb msg, rcv msg: " << tcp_msg->msg_data;
                     break;
                 }
                 case 1:
                 {
                     //正常消息
                     std::cout << "rcv msg is: " << msg_data1 << std::endl;
-                    //memset(read_buffer_, 0, 20);    
-                    break;                
+                    //memset(read_buffer_, 0, 20);
+                    break;
                 }
                 default:
                 {
-                    std::cout << "un support msg type: " << tcp_msg->msg_type 
+                    std::cout << "un support msg type: " << tcp_msg->msg_type
                               <<  "rcv msg: " << msg_data1 << std::endl;
                     break;
                 }
@@ -232,8 +237,15 @@ void Session::io_work()
 
 int main()
 {
+    // {
+    //     MyLog mylog;
+	//     mylog.Init("./log");// 日志文件存放的路径
+    //     for (int i = 0; i < 100; ++i)
+    //         mylog.Log("start service!!!");
+    // }
     boost::shared_ptr<Session> session_ = boost::make_shared<Session>();
     session_->Start();
     while(1);
+    session_->Stop();
     return 0;
 }

@@ -18,7 +18,7 @@ exe client
     : 
       [ path.glob $(CWD)/ : *.cpp ]
       $(CPP_PATH)//boost
-      $(3RD_PATH)//3rd_base<link>static
+      $(3RD_PATH)//3rd_base/<link>static
       #$(CWD)/asio_client.cpp
       #$(CWD)/client_app.cpp
       #$(BOOST_PARH)/libboost_system.so

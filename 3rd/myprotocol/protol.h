@@ -1,5 +1,5 @@
-#ifndef __PROTOL__H
-#define __PROTOL__H
+#ifndef __3RD_PROTOL__H
+#define __3RD_PROTOL__H
 
 #include <stdint.h>
 
