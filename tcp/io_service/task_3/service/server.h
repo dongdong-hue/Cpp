@@ -10,16 +10,23 @@
 #include <boost/make_shared.hpp>
 #include <boost/function.hpp>
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/array.hpp>
+#include <boost/scoped_array.hpp>
+#include <boost/shared_array.hpp>
 #include <iostream>
-#include<chrono>
-
+#include <vector>
+#include <string>
+#include <chrono>
+#include "protol.h"
+#include "config.h"
+#include <include/utils.h>
 #define HEARTEMSG std::string("123456789")
 
 using namespace boost::asio;
 typedef boost::shared_ptr<ip::tcp::socket> socket_ptr;
 
 class Session : public boost::enable_shared_from_this<Session>
-	, boost::noncopyable 
+        , boost::noncopyable
 {
 public:
     Session();
@@ -27,17 +34,21 @@ public:
     void HadleRead(const boost::system::error_code &err, socket_ptr sock_ptr);
     void handle_accept(const boost::system::error_code &err, socket_ptr sock_ptr);
     void WriteMsg(/*const boost::system::error_code &err, socket_ptr sock_ptr*/);
-    void SendMsg(const std::string& send_msg);
+    void SendMsg(std::string& send_msg, const std::size_t msg_len , const uint16_t msg_type);
     void SendCallFunc(std::size_t msg_len, const boost::system::error_code& err, std::size_t len);
     void Async_write(const boost::system::error_code &err, socket_ptr sock_ptr);
+    void AsyncAccept();
     int64_t GetNowTimepoint();
     void StartTime();
     void TimerFun(const boost::system::error_code& error);
-    void start_accept(); 
-    void handle_msg(const boost::system::error_code &err, char* msg, socket_ptr sock_ptr);
+    bool Init();
+    void Start();
+    void Stop();
+    void handle_msg(const boost::system::error_code &err, std::size_t rcv_len, const char* msg, socket_ptr sock_ptr);
     void io_work();
+    void SpliteMsg(char* msg, bool& is_erase, uint32_t& msg_len);
 private:
-    char read_buffer_[20];
+    std::string read_buffer_;
     char write_buffer_[512];
     boost::asio::io_service service_;
     boost::shared_ptr<boost::asio::ip::tcp::endpoint> ep_ = {nullptr};
@@ -48,6 +59,7 @@ private:
     int64_t heart_interval_ = {3};
     int64_t last_timepoint_ = {0};
     boost::asio::deadline_timer timer_{service_};
+    Sev::Config::Cfg cfg_;
 };
 
 #endif

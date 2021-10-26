@@ -1,5 +1,5 @@
 #include "GameWidget.h"
-
+#include <QDebug>
 // 颜色数组 存储每个数字对应的背景色
 QColor digitBkg[11] = {QColor::fromRgb(0xFF, 0xFF, 0xCC), QColor::fromRgb(0xFF, 0xFF, 0x99),
                             QColor::fromRgb(0xFF, 0xCC, 0xCC), QColor::fromRgb(0xFF, 0xCC, 0x99),
@@ -306,7 +306,9 @@ bool GameWidget::drawAnimation(QPainter &painter)
     painter.setPen(Qt::NoPen);
 
     // 绘制一个矩形
-    painter.drawRoundedRect(QRectF(2 * ratioW, 2 * ratioH, width() - 4 * ratioW, height() - 4 * ratioH), rX, rY);
+    painter.drawRoundedRect(QRectF(2 * ratioW, 2 * ratioH, \
+                            width() - 4 * ratioW, height() - 4 * ratioH),
+                            rX, rY);
 
     // 设置画刷颜色为 RGB分量为171 165 141的颜色
     brush.setColor(QColor::fromRgb(171, 165, 141));
@@ -495,6 +497,8 @@ void GameWidget::resizeEvent(QResizeEvent *)
     ratioW = width() / 400.0, ratioH = height() / 400.0;
     // 计算每个小格子的宽度和高度
     w = width() - 4 * ratioW, h = height() - 4 * ratioH;
+    qDebug() << "ratioW:" << ratioW << " ,ratioH: " << ratioH
+             << " ,w: " << w << " ,h: " << h << "\n";
     w = (w - 25 * ratioW) / 4, h = (h - 25 * ratioH) / 4;
     rX = 15 * ratioW, rY = 15 * ratioH;
     dPos[0] = QPointF(-25 * ratioW, 0);

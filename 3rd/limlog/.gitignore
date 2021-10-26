@@ -1,0 +1,6 @@
+.vs/
+.vscode/
+tests/*
+!tests/*[.cpp|c|h]
+*.log
+*.txt

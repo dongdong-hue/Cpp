@@ -1,0 +1,42 @@
+import path ;
+import os ;
+import toolset ;
+
+path-constant CPP_PATH : . ;
+local boost_root = /usr/lib ;
+if ! [ path.exists $(boost_root) ]
+{
+    path-constant boost_root : [ os.environ BOOST_ROOT ] ;
+    if ! $(boost_root)
+    {
+        echo empty 'boost_root' ;
+        exit ;
+    }
+}
+echo boost_path is: '$(boost_root)' ;
+constant BOOST_PARH : $(boost_root) ;
+
+local boost_include = /boost_1_62_0 ;
+echo boost_include is: '$(boost_include)' ;
+
+alias boost_hearder_only
+    :
+    :
+        #<library>$(boost_root)/stage/lib/libboost_thread.so
+        #<library>$(boost_root)/stage/lib/libboost_system.so
+    :
+    :
+        <include>$(boost_include)
+    ;
+
+lib boost
+    :
+        boost_hearder_only
+    :
+        <file>$(boost_root)/libboost_system.so
+        <file>$(boost_root)/libboost_thread.so
+        #<file>$(boost_root)/stage/lib/libboost_system.so
+        #<link>static
+    :
+    :
+    ;

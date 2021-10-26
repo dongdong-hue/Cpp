@@ -1,0 +1,10 @@
+**bin
+**stage
+**.Debug
+**.exe
+**.user
+**.o
+**.out
+**.s
+build**
+qt-master

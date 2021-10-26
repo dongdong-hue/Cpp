@@ -9,7 +9,8 @@
 #include "GameWidget.h"
 
 #define LBLSTYLESHEET "QLabel {color: orange;background: #FFFFCC;border: %1px solid orange;border-radius: %2px;}"
-#define BTNSTYLESHEET "QPushButton {color: red;background: lightgray;border: %1px solid darkgray;border-radius: %2px;} QPushButton:pressed{color: white;background: orange;border: %1px solid darkgray;border-radius: %2px;}"
+#define BTNSTYLESHEET "QPushButton {color: red;background: lightgray;border: %1px solid darkgray;border-radius: %2px;} \
+                        QPushButton:pressed{color: white;background: orange;border: %1px solid darkgray;border-radius: %2px;}"
 
 // 主窗口部件类
 class Widget : public QWidget

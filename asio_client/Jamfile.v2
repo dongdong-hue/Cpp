@@ -1,0 +1,41 @@
+import path ;
+import os ;
+import toolset ;
+
+path-constant CWD : . ;
+path-constant 3RD_PATH : $(CPP_PATH)/3rd ;
+# project service
+#   : 
+#     #<toolset>gcc:<cxxflags>"-std=c++11"
+#   :
+#     default-build
+#     <debug-symbols>on
+#     release
+#     <threading>multi
+#   ;
+
+exe client
+    : 
+      [ path.glob $(CWD)/ : *.cpp ]
+      $(CPP_PATH)//boost
+      $(3RD_PATH)//3rd_base/<link>static
+      #$(CWD)/asio_client.cpp
+      #$(CWD)/client_app.cpp
+      #$(BOOST_PARH)/libboost_system.so
+      #$(BOOST_PARH)/libboost_thread.so
+    :
+      <cxxflags>"-std=c++11"
+      <linkflags>-Wl,--no-as-needed
+      <linkflags>-lrt
+      <linkflags>-ldl
+      #<linkflags>-lcrypto
+    ;
+
+install stage : 
+                client 
+              : <install-dependencies>on 
+                <install-type>EXE 
+                <install-type>LIB 
+                <location>$(CWD)/stage ;
+
+explicit stage ;

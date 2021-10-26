@@ -22,15 +22,18 @@ Widget::Widget(QWidget *parent)
 
     // 构造一个字体对象
     QFont font;
-    font.setFamily("Consolas");
-    font.setBold(true);
-    font.setPixelSize(25);
+    font.setFamily("Bold Italic"); // Bold Italic 加粗斜体  "Consolas"
+    font.setBold(true);            // 设置加粗
+    font.setPixelSize(25);         // 设置像素大小
 
     // 构造一个按钮对象
     restartBtn = new QPushButton("Restart", this);
     restartBtn->setGeometry(100, 120, 200, 50);
     restartBtn->setFont(font);
     restartBtn->setStyleSheet(QString(BTNSTYLESHEET).arg(3).arg(15));
+    qDebug() << "QString(BTNSTYLESHEET)" << QString(BTNSTYLESHEET) << "\n"
+             << "QString(BTNSTYLESHEET).arg(3).arg(15)"
+             << QString(BTNSTYLESHEET).arg(3).arg(15) << "\n";
     connect(restartBtn, SIGNAL(clicked()), gameWidget, SLOT(restart()));
 
     // 构造一个标签对象
@@ -50,7 +53,7 @@ Widget::Widget(QWidget *parent)
              << "QString(LBLSTYLESHEET).arg(5).arg(20)"
              << QString(LBLSTYLESHEET).arg(5).arg(20) << "\n";
     // 重置窗口大小
-    //resize(404, 606);
+    resize(404, 606);
 }
 
 Widget::~Widget()
